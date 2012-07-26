@@ -22,7 +22,7 @@ def I_am_asked_for_my_move(context):
 
 @step(u'I should see an empty board')
 def I_should_see_an_empty_board(context):
-    verify(context.game.reporter).show_board(list("........."))
+    verify(context.game.reporter).show_board(".........")
 
 @step(u't3 is running')
 def t3_is_running(context):
@@ -30,8 +30,16 @@ def t3_is_running(context):
 
 @step(u'I make a move')
 def I_make_a_move(context):
+    context.game.reporter = reset_mock()
     context.game.move("X", "A1")
 
 @step(u'I should see that move')
 def I_should_see_that_move(context):
-    verify(context.game.reporter).show_board(list("X........"))
+    verify(context.game.reporter).show_board("X........")
+
+def reset_mock():
+    return mock()
+
+
+
+
