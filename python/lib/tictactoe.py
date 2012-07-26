@@ -1,3 +1,5 @@
+PLAYER_X = "X"
+PLAYER_O = "O"
 EMPTY_BOARD = "."*9
 
 class tictactoe(object):
