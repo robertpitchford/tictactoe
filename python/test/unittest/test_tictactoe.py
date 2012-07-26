@@ -20,3 +20,10 @@ class TestStartup(object):
 
     def test_empty_board_shown(self):
         verify(self.reporter).show_board("."*9)
+
+    def test_player_makes_a_move(self):
+        player = tictactoe.PLAYER_X
+        location = "A1"
+        self.t3.move(player, location)
+
+        verify(self.reporter).show_board("X" + "."*9)
