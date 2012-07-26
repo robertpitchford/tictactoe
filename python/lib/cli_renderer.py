@@ -8,12 +8,13 @@ class BoardRendererCli(object):
         self.output.write(msg + os.linesep)
 
     def show_board(self, board):
+        b = "".join(board)
         self.render_column_headings()
-        self.render_row("1", board[0:3])
+        self.render_row("1", b[0:3])
         self.render_row_separator()
-        self.render_row("2", board[3:6])
+        self.render_row("2", b[3:6])
         self.render_row_separator()
-        self.render_row("3", board[6:9])
+        self.render_row("3", b[6:9])
 
     def render_column_headings(self):
         self.output.write("  A B C" + os.linesep)

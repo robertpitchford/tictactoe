@@ -1,4 +1,6 @@
 #noinspection PyUnresolvedReferences
+import sys
+import cli_renderer
 import test_helper
 from nose.tools import with_setup
 import tictactoe
@@ -19,11 +21,14 @@ class TestStartup(object):
         verify(self.reporter).message(contains("Your move:"))
 
     def test_empty_board_shown(self):
-        verify(self.reporter).show_board("."*9)
+        verify(self.reporter).show_board(list("."*9))
 
+class TestPlayGame(object):
     def test_player_makes_a_move(self):
+        self.reporter = mock()
+        self.t3 = tictactoe.tictactoe(self.reporter)
         player = tictactoe.PLAYER_X
         location = "A1"
         self.t3.move(player, location)
 
-        verify(self.reporter).show_board("X" + "."*9)
+        verify(self.reporter).show_board(list("X" + "."*8))
