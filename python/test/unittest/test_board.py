@@ -1,13 +1,15 @@
 #noinspection PyUnresolvedReferences
+from should_dsl.matchers import be, equal_to
+from should_dsl import *
 import test_helper
 from nose.tools import with_setup
-import tictactoe
+import board
 from mockito import *
 
 class TestStartup(object):
     def setup(self):
         self.reporter = mock()
-        self.t3 = tictactoe.tictactoe(self.reporter)
+        self.t3 = board.board(self.reporter)
 
     @with_setup(setup)
 
@@ -23,7 +25,7 @@ class TestStartup(object):
 class TestAddMoveToBoard(object):
     def setup(self):
         self.reporter = mock()
-        self.t3 = tictactoe.tictactoe(self.reporter)
+        self.t3 = board.board(self.reporter)
 
     def test_get_position(self):
         positions = [("A1", 0),
@@ -41,8 +43,7 @@ class TestAddMoveToBoard(object):
             yield self.assert_position, location, index
 
     def assert_position(self, location, expected_index):
-        actual = self.t3.get_position(location)
-        assert actual == expected_index, "%s != %s" % (actual, expected_index)
+        self.t3.get_position(location) |should| be(expected_index)
 
     def test_add_player_to_board(self):
         locations = [
@@ -55,14 +56,13 @@ class TestAddMoveToBoard(object):
             yield self.assert_player_move_added, location, expected_board
 
     def assert_player_move_added(self, location, expected_board):
-        self.t3.board = tictactoe.EMPTY_BOARD
-        actual = self.t3.add_player_at_position(location, "X")
-        assert actual == expected_board, "%s != %s" % (actual, expected_board)
+        self.t3.board = board.EMPTY_BOARD
+        self.t3.add_player_at_position(location, "X") |should| equal_to(expected_board)
 
 class TestPlayGame(object):
     def test_player_makes_a_move(self):
         self.reporter = mock()
-        self.t3 = tictactoe.tictactoe(self.reporter)
-        self.t3.move(tictactoe.PLAYER_X, "A1")
+        self.t3 = board.board(self.reporter)
+        self.t3.move(board.PLAYER_X, "A1")
 
         verify(self.reporter, atleast=1).show_board("X" + "."*8)

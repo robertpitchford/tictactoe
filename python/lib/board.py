@@ -3,7 +3,7 @@ PLAYER_X = "X"
 PLAYER_O = "O"
 EMPTY_BOARD = "."*9
 
-class tictactoe(object):
+class board(object):
     def __init__(self, reporter):
         self.board = EMPTY_BOARD
         self.reporter = reporter

@@ -1,3 +1,6 @@
+from should_dsl.matchers import be, equal_to
+from should_dsl import *
+import test_helper
 from nose.tools import with_setup
 import cli_renderer
 import os
@@ -29,11 +32,9 @@ class TestBoardRendering(object):
     def test_show_empty_board(self):
         self.r.show_board("."*9)
 
-        expected = "  A B C\n1  | | \n  -+-+-\n2  | | \n  -+-+-\n3  | | \n"
-        assert self.output.out == expected, "%s != %s" % (self.output.out, expected)
+        self.output.out |should| equal_to("  A B C\n1  | | \n  -+-+-\n2  | | \n  -+-+-\n3  | | \n")
 
     def test_show_populated_board(self):
         self.r.show_board("XXOOXOXOX")
 
-        expected = "  A B C\n1 X|X|O\n  -+-+-\n2 O|X|O\n  -+-+-\n3 X|O|X\n"
-        assert self.output.out == expected, "%s != %s" % (self.output.out, expected)
+        self.output.out |should| equal_to("  A B C\n1 X|X|O\n  -+-+-\n2 O|X|O\n  -+-+-\n3 X|O|X\n")

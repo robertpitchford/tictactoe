@@ -1,7 +1,7 @@
 import os, inspect, sys
 sys.path.append(os.path.dirname(inspect.getfile(inspect.currentframe())) + "/../lib")
 
-import tictactoe
+import board
 import cli_renderer
 
-tictactoe.tictactoe(cli_renderer.BoardRendererCli(sys.stdout))
+board.board(cli_renderer.BoardRendererCli(sys.stdout))

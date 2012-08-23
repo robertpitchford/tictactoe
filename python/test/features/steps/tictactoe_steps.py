@@ -2,7 +2,7 @@
 import test_helper
 from behave import step
 from mockito import *
-import tictactoe
+import board
 
 @step(u't3 is not running')
 def game_is_not_running(context):
@@ -10,7 +10,7 @@ def game_is_not_running(context):
 
 @step(u'I start a new game')
 def I_start_a_new_game(context):
-    context.game = tictactoe.tictactoe(mock())
+    context.game = board.board(mock())
 
 @step(u'I should see "{msg}"')
 def I_should_see(context, msg):
