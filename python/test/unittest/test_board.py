@@ -66,3 +66,42 @@ class TestPlayGame(object):
         self.t3.move(board.PLAYER_X, "A1")
 
         verify(self.reporter, atleast=1).show_board("X" + "."*8)
+
+class TestDetectWinner(object):
+    def test_should_identify_winner(self):
+        scenarios = [
+            ("XX.......", "C1"), # first row
+            ("...X.X...", "B2"), # second row
+            (".......XX", "A3"), # third row
+            ("X...X....", "C3"), # TL-BR
+            ("..X...X..", "B2"), # BL-TR
+            ("X..X.....", "A3"), # first column
+            (".X.....X.", "B2"), # second column
+            (".....X..X", "C1"), # third column
+        ]
+        for scenario in scenarios:
+            yield self.assert_winner, scenario
+
+    def assert_winner(self, scenario):
+        (starting_board, move) = scenario
+        t3 = board.board(mock())
+        t3.board = starting_board
+        t3 | should_not | be_winner
+        # when
+        t3.move(board.PLAYER_X, move)
+        # then
+        t3 | should | be_winner
+
+    def test_should_not_identify_winner_when_there_is_no_winner(self):
+        scenarios = [
+            ("XO.......", "C1")
+        ]
+        for scenario in scenarios:
+            yield self.assert_not_winner, scenario
+
+    def assert_not_winner(self, scenario):
+        (starting_board, move) = scenario
+        t3 = board.board(mock())
+        t3.board = starting_board
+        t3.move(board.PLAYER_X, move)
+        t3 | should_not | be_winner

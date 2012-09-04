@@ -1,4 +1,5 @@
 #noinspection PyUnresolvedReferences
+from should_dsl.dsl import should
 import test_helper
 from behave import step
 from mockito import *
@@ -36,6 +37,16 @@ def I_make_a_move(context):
 @step(u'I should see that move')
 def I_should_see_that_move(context):
     verify(context.game.reporter).show_board("X........")
+
+@step(u'I make a winning move')
+def I_make_a_winning_move(context):
+    context.game.reporter = reset_mock()
+    context.game.board = "..X.X...."
+    context.game.move("X", "A3")
+
+@step('I should win the game')
+def I_should_sin_the_game(context):
+    context.game |should| be_winner
 
 def reset_mock():
     return mock()
