@@ -2,7 +2,7 @@
 from should_dsl.matchers import be, equal_to
 from should_dsl import *
 import test_helper
-from nose.tools import with_setup
+from nose.tools import with_setup, raises
 import board
 from mockito import *
 
@@ -16,9 +16,6 @@ class TestStartup(object):
     def test_welcome_message(self):
         verify(self.reporter).message(contains("Welcome to T3!"))
 
-    def test_next_move_message(self):
-        verify(self.reporter).message(contains("Your move:"))
-
     def test_empty_board_shown(self):
         verify(self.reporter).show_board("."*9)
 
@@ -28,22 +25,42 @@ class TestAddMoveToBoard(object):
         self.t3 = board.board(self.reporter)
 
     def test_get_position(self):
-        positions = [("A1", 0),
+        positions = \
+           [("A1", 0),
             ("B1", 1),
-            ("C1", 2),
-            ("A2", 3),
-            ("B2", 4),
+            ("1c", 2),
+            ("2A", 3),
+            ("b2", 4),
             ("C2", 5),
-            ("A3", 6),
+            ("a3", 6),
             ("B3", 7),
-            ("C3", 8),
+            ("3C", 8),
         ]
         for position in positions:
             (location, index) = position
             yield self.assert_position, location, index
 
+    def test_get_position_throws_exception(self):
+        positions = [
+            ("A4"),
+            ("A0"),
+            ("Z1"),
+            ("Z9"),
+            ("$1"),
+            ("A%"),
+            ("AA"),
+            ("11"),
+        ]
+        for position in positions:
+            location = position
+            yield self.assert_position_failure, location
+
     def assert_position(self, location, expected_index):
         self.t3.get_position(location) |should| be(expected_index)
+
+    @raises(board.MoveSyntaxError)
+    def assert_position_failure(self, location):
+        self.assert_position(location, 0)
 
     def test_add_player_to_board(self):
         locations = [

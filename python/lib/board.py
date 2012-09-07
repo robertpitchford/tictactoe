@@ -1,3 +1,12 @@
+import re
+
+class MoveSyntaxError(Exception):
+    def __init__(self, value, *args, **kwargs):
+        super(MoveSyntaxError, self).__init__(*args, **kwargs)
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
+
 TOTAL_COLUMNS = 3
 PLAYER_X = "X"
 PLAYER_O = "O"
@@ -9,7 +18,6 @@ class board(object):
         self.board = EMPTY_BOARD
         self.reporter = reporter
         self.reporter.message("Welcome to T3!\n")
-        self.reporter.message("Your move:\n")
         self.reporter.show_board(self.board)
 
     def move(self, player, location):
@@ -18,9 +26,24 @@ class board(object):
         self.reporter.show_board(self.board)
 
     def get_position(self, location):
-        zero_based_column = ord(location[0]) - ord('A')
-        zero_based_row = int(location[1])-1
-        return TOTAL_COLUMNS * zero_based_row + zero_based_column
+        location = location.upper()
+        column = self.get_zero_based_column(location)
+        row = self.get_zero_based_row(location)
+        return TOTAL_COLUMNS * row + column
+
+    def get_zero_based_column(self, location):
+        try:
+            id = re.findall('[a-cA-C]', location)[0]
+        except IndexError:
+            raise MoveSyntaxError("Invalid column in {location}".format(location=location))
+        return ord(id) - ord('A')
+
+    def get_zero_based_row(self, location):
+        try:
+            id = re.findall('[1-3]', location)[0]
+        except IndexError:
+            raise MoveSyntaxError("Invalid row in {location}".format(location=location))
+        return int(id) - 1
 
     def add_player_at_position(self, position, player):
         return self.board[:position] + player + self.board[position + 1:]

@@ -9,4 +9,3 @@ Feature: Running t3
     When I start a new game
     Then I should see "Welcome to T3!"
     And  I should see an empty board
-    And  I am asked for my move
