@@ -11,9 +11,13 @@ i = 0
 
 while not t3.winner() and not t3.draw():
     player = players[i % len(players)]
-    i += 1
     location = raw_input("move for {who} ? ".format(who=player))
-    t3.move(player, location)
+    try:
+        t3.move(player, location)
+    except Exception as e:
+        print e.args[0]
+        continue
+    i += 1
     print
 
 if t3.draw():

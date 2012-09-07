@@ -1,7 +1,6 @@
 TODO
 ====
 
-* space taken
 * computer player
 ** random player (easy)
 ** draw or lose (medium)

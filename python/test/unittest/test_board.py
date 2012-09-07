@@ -157,3 +157,8 @@ class TestDetectWinner(object):
         t3 | should | be_draw
         t3 | should_not | be_winner
 
+    @raises(board.MoveSpaceTakenError)
+    def test_should_raise_error_if_space_already_taken(self):
+        t3 = board.board(mock())
+        t3.board = "X........"
+        t3.move(board.PLAYER_X, "A1")

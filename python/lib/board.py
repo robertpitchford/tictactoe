@@ -1,11 +1,10 @@
 import re
 
 class MoveSyntaxError(Exception):
-    def __init__(self, value, *args, **kwargs):
-        super(MoveSyntaxError, self).__init__(*args, **kwargs)
-        self.value = value
-    def __str__(self):
-        return repr(self.value)
+    pass
+
+class MoveSpaceTakenError(Exception):
+    pass
 
 TOTAL_COLUMNS = 3
 PLAYER_X = "X"
@@ -35,18 +34,21 @@ class board(object):
         try:
             id = re.findall('[a-cA-C]', location)[0]
         except IndexError:
-            raise MoveSyntaxError("Invalid column in {location}".format(location=location))
+            raise MoveSyntaxError("Invalid column in '{location}'".format(location=location))
         return ord(id) - ord('A')
 
     def get_zero_based_row(self, location):
         try:
             id = re.findall('[1-3]', location)[0]
         except IndexError:
-            raise MoveSyntaxError("Invalid row in {location}".format(location=location))
+            raise MoveSyntaxError("Invalid row in '{location}'".format(location=location))
         return int(id) - 1
 
     def add_player_at_position(self, position, player):
-        return self.board[:position] + player + self.board[position + 1:]
+        if self.board[position] == EMPTY:
+            return self.board[:position] + player + self.board[position + 1:]
+        else:
+            raise MoveSpaceTakenError("Space already taken")
 
     def winner(self):
         b = self.board
