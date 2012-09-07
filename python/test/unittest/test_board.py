@@ -68,16 +68,36 @@ class TestPlayGame(object):
         verify(self.reporter, atleast=1).show_board("X" + "."*8)
 
 class TestDetectWinner(object):
+    def test_empty_board_should_not_be_winner(self):
+        t3 = board.board(mock())
+        t3 |should_not| be_winner
+
     def test_should_identify_winner(self):
         scenarios = [
-            ("XX.......", "C1"), # first row
-            ("...X.X...", "B2"), # second row
-            (".......XX", "A3"), # third row
-            ("X...X....", "C3"), # TL-BR
-            ("..X...X..", "B2"), # BL-TR
-            ("X..X.....", "A3"), # first column
-            (".X.....X.", "B2"), # second column
-            (".....X..X", "C1"), # third column
+            ("XX."
+             "..."
+             "...", "C1"), # first row
+            ("..."
+             "X.X"
+             "...", "B2"), # second row
+            ("..."
+             "..."
+             ".XX", "A3"), # third row
+            ("X.."
+             ".X."
+             "...", "C3"), # TL-BR
+            ("..X"
+             "..."
+             "X..", "B2"), # BL-TR
+            ("X.."
+             "X.."
+             "...", "A3"), # first column
+            (".X."
+             "..."
+             ".X.", "B2"), # second column
+            ("..."
+             "..X"
+             "..X", "C1"), # third column
         ]
         for scenario in scenarios:
             yield self.assert_winner, scenario
@@ -94,7 +114,12 @@ class TestDetectWinner(object):
 
     def test_should_not_identify_winner_when_there_is_no_winner(self):
         scenarios = [
-            ("XO.......", "C1")
+            ("XO."
+             "..."
+             "...", "C1"),
+            ("OXO"
+             "XOX"
+             ".OX", "A3"),
         ]
         for scenario in scenarios:
             yield self.assert_not_winner, scenario
