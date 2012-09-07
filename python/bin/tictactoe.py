@@ -9,9 +9,14 @@ t3 = board.board(cli_renderer.BoardRendererCli(sys.stdout))
 players = [board.PLAYER_O, board.PLAYER_X]
 i = 0
 
-while not t3.winner():
+while not t3.winner() and not t3.draw():
     player = players[i % len(players)]
     i += 1
     location = raw_input("move for {who} ? ".format(who=player))
     t3.move(player, location)
     print
+
+if t3.draw():
+    print "Draw!"
+else:
+    print "{player}'s win!".format(player=player)

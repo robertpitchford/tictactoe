@@ -56,3 +56,6 @@ class board(object):
             if b[c0] != EMPTY and b[c0] == b[c1] and b[c1] == b[c2]:
                 return True
         return False
+
+    def draw(self):
+        return "." not in self.board and not self.winner()

@@ -128,6 +128,7 @@ class TestDetectWinner(object):
         t3.move(board.PLAYER_X, move)
         # then
         t3 | should | be_winner
+        t3 | should_not | be_draw
 
     def test_should_not_identify_winner_when_there_is_no_winner(self):
         scenarios = [
@@ -147,3 +148,12 @@ class TestDetectWinner(object):
         t3.board = starting_board
         t3.move(board.PLAYER_X, move)
         t3 | should_not | be_winner
+
+    def test_should_detect_draw(self):
+        t3 = board.board(mock())
+        t3.board = "".join(["OXO",
+                            "XOX",
+                            "XOX"])
+        t3 | should | be_draw
+        t3 | should_not | be_winner
+
